@@ -10,6 +10,7 @@ import { User } from '../user/entities/user.entity';
 import { AuthUserDto } from './dto/AuthUserDto';
 import { CreateUserDto } from '../user/dto/CreateUserDto';
 import { CredentialsDto } from './dto/CredentialsDto';
+import { ApiResponse } from '../../common/api-response';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -30,7 +31,15 @@ export class AuthController {
   @Get('me')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  async me(@LoggedUser() user): Promise<User> {
-    return user;
+  async me(@LoggedUser() loggedUser: AuthUserDto): Promise<ApiResponse> {
+    const user = await this.authService.getAuthUser(loggedUser);
+    return new ApiResponse(200, "", user);
+  }
+
+  @Get('ping-me')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async pingme(@LoggedUser() user): Promise<ApiResponse> {
+    return new ApiResponse(200, "", user);
   }
 }

@@ -26,7 +26,7 @@ export class AuthLocalService implements AuthService {
             name: user.name,
             email: user.email,
         });
-        return new AuthUserDto({ name: user.name, email: user.email }, jwtRes);
+        return new AuthUserDto(user.name, user.email, jwtRes);
     }
     
     async validateUser(credentials: CredentialsDto): Promise<User> {
@@ -40,5 +40,10 @@ export class AuthLocalService implements AuthService {
 
     async registerUser(createUserDto: CreateUserDto): Promise<UserDto> {
         return await this.userService.create(createUserDto);
+    }
+
+    async getAuthUser(loggedUser: AuthUserDto): Promise<UserDto> {
+        const user = await this.userService.findOneBy({ email: loggedUser.email });
+        return new UserDto(user);
     }
 }
