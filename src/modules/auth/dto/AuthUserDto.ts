@@ -1,13 +1,11 @@
-import { JwtResponseDto } from './JwtResponseDto';
-
 export class AuthUserDto {
     name: string;
     email: string;
-    jwt: JwtResponseDto;
+    token: string;
 
-    constructor(name: string, email: string, jwt: JwtResponseDto) {
+    constructor(name: string, email: string, token: string) {
         this.name = name;
         this.email = email;
-        this.jwt = jwt;
+        this.token = token;
     }
 }

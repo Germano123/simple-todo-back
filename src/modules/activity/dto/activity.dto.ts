@@ -5,6 +5,9 @@ import { Activity } from "../entities/activity.entity";
 export class ActivityDto extends AbstractDto {
     @ApiProperty()
     title: string;
+
+    @ApiProperty()
+    description: string;
     
     @ApiProperty()
     ownerId: string;
@@ -12,6 +15,7 @@ export class ActivityDto extends AbstractDto {
     constructor(entity: Activity) {
         super(entity);
         this.title = entity.title;
+        this.description = entity.description;
         this.ownerId = entity.owner.id;
     }
 }

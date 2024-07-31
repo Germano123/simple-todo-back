@@ -47,7 +47,7 @@ export class ApiConfigService {
 
     get typeOrmConfig(): TypeOrmModuleOptions {
         const entities = [__dirname + '/../../modules/**/*.entity{.ts,.js}'];
-        const migrations = [__dirname + '/../../migrations/*{.ts,.js}'];
+        const migrations = [__dirname + '/../../database/migrations/*{.ts,.js}'];
 
         return {
             entities,

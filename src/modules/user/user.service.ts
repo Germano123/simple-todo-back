@@ -20,7 +20,6 @@ export class UserService {
   async findOneBy(options: Partial<FindUserDto>): Promise<User> {
     return await this.repo.findOneBy({
       id: options.id,
-      cpf: options.cpf,
       name: options.name,
       email: options.email,
     });
@@ -29,13 +28,13 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
     let user = this.repo.create();
     
-    let cpf = createUserDto.cpf.trim().replace(/[-. ]/g, '');
-    cpf = CpfValidator.format(createUserDto.cpf);
-    if (!CpfValidator.isValid(createUserDto.cpf)) {
-      throw new HttpException({
-        reason: "Cpf is invalid",
-      }, HttpStatus.BAD_REQUEST);
-    }
+    // let cpf = createUserDto.cpf.trim().replace(/[-. ]/g, '');
+    // cpf = CpfValidator.format(createUserDto.cpf);
+    // if (!CpfValidator.isValid(createUserDto.cpf)) {
+    //   throw new HttpException({
+    //     reason: "Cpf is invalid",
+    //   }, HttpStatus.BAD_REQUEST);
+    // }
     
     // TODO: validate email
     // TODO: validate password
@@ -43,7 +42,7 @@ export class UserService {
     user = { 
       ...user,
       ...createUserDto,
-      cpf,
+      // cpf,
     }
     user = await this.repo.save(createUserDto);
     // console.log(user);

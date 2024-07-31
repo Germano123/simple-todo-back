@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UserDto } from '../user/dto/UserDto';
 import { CreateUserDto } from '../user/dto/CreateUserDto';
 import { CredentialsDto } from './dto/CredentialsDto';
-import { JwtResponseDto } from './dto/JwtResponseDto';
 import { AuthUserDto } from './dto/AuthUserDto';
 
 @Injectable()
@@ -20,13 +19,12 @@ export class AuthLocalService implements AuthService {
     
     async login(credentials: CredentialsDto): Promise<AuthUserDto> {
         const user = await this.userService.findOneBy({ email: credentials.email });
-        let jwtRes = new JwtResponseDto('', '');
-        jwtRes.access_token = this.jwtService.sign({
+        const access_token = this.jwtService.sign({
             id: user.id,
             name: user.name,
             email: user.email,
         });
-        return new AuthUserDto(user.name, user.email, jwtRes);
+        return new AuthUserDto(user.name, user.email, access_token);
     }
     
     async validateUser(credentials: CredentialsDto): Promise<User> {

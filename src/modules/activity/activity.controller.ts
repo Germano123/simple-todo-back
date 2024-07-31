@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
 import { ActivityService } from "./activity.service";
 import { CreateActivityDto } from "./dto/create-activity.dto";
 import { UpdateActivityDto } from "./dto/update-activity.dto";
 import { ApiResponse } from "../../common/api-response";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthUserDto } from "../auth/dto/AuthUserDto";
-import { AuthUser } from "src/decorators/auth-user.decorator";
+import { AuthUser } from "../../decorators/auth-user.decorator";
+import { JwtAuthGuard } from "../../guards/jwt-auth.guard";
 
 @ApiTags("Activities")
 @Controller("activity")
@@ -14,6 +15,7 @@ export class ActivityController {
 
   @Post("create-activity")
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   async create(
     @AuthUser() loggedUser: AuthUserDto,
     @Body() createActivityDto: CreateActivityDto,
@@ -36,6 +38,7 @@ export class ActivityController {
 
   @Patch("update-activity/:id")
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   async update(
     @AuthUser() loggedUser: AuthUserDto,
     @Param("id") id: string,
@@ -47,6 +50,7 @@ export class ActivityController {
 
   @Delete("delete-activity/:id")
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   async remove(
     @AuthUser() loggedUser: AuthUserDto,
     @Param("id") id: string,

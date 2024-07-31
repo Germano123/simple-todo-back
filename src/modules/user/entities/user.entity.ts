@@ -11,9 +11,6 @@ export class User extends AbstractEntity {
     @Column({ unique: true, nullable: false })
     email: string;
 
-    @Column({ unique: true, nullable: false })
-    cpf: string;
-
     @Column({ nullable: true })
     password: string;
 
@@ -26,6 +23,7 @@ export class User extends AbstractEntity {
     // relations
     @OneToMany(() => Activity, (activity) => activity.owner, {
         eager: true,
+        cascade: true,
     })
     @JoinColumn()
     activities: Activity[];

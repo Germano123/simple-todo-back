@@ -36,7 +36,9 @@ export class ActivityService {
       owner: user,
     }
 
-    activity = await this.repo.save(createActivityDto);
+    console.log(activity);
+    
+    await this.repo.save(createActivityDto);
     
     return new ActivityDto(activity);
   }
