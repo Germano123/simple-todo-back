@@ -5,7 +5,7 @@ export class ApiResponse {
     message?: string;
     data?: any;
 
-    constructor(status: number, message: string, data: AbstractDto) {
+    constructor(status: number, message: string, data: AbstractDto | AbstractDto[] ) {
         this.status = status;
         this.message = message;
         this.data = data;

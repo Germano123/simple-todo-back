@@ -1,34 +1,57 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ActivityService } from './activity.service';
-import { CreateActivityDto } from './dto/create-activity.dto';
-import { UpdateActivityDto } from './dto/update-activity.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { ActivityService } from "./activity.service";
+import { CreateActivityDto } from "./dto/create-activity.dto";
+import { UpdateActivityDto } from "./dto/update-activity.dto";
+import { ApiResponse } from "../../common/api-response";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { AuthUserDto } from "../auth/dto/AuthUserDto";
+import { AuthUser } from "src/decorators/auth-user.decorator";
 
-@Controller('activity')
+@ApiTags("Activities")
+@Controller("activity")
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
 
-  @Post()
-  create(@Body() createActivityDto: CreateActivityDto) {
-    return this.activityService.create(createActivityDto);
+  @Post("create-activity")
+  @ApiBearerAuth()
+  async create(
+    @AuthUser() loggedUser: AuthUserDto,
+    @Body() createActivityDto: CreateActivityDto,
+  ): Promise<ApiResponse> {
+    const activity = await this.activityService.create(loggedUser, createActivityDto);
+    return new ApiResponse(200, "", activity);
   }
 
-  @Get()
-  findAll() {
-    return this.activityService.findAll();
+  @Get("get-all-activities")
+  async findAll(): Promise<ApiResponse> {
+    const activities = await this.activityService.findAll();
+    return new ApiResponse(200, "", activities);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.activityService.findOne(+id);
+  @Get("get-activity/:id")
+  async findOne(@Param("id") id: string): Promise<ApiResponse> {
+    const activity = await this.activityService.findOne(id);
+    return new ApiResponse(200, "", activity);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateActivityDto: UpdateActivityDto) {
-    return this.activityService.update(+id, updateActivityDto);
+  @Patch("update-activity/:id")
+  @ApiBearerAuth()
+  async update(
+    @AuthUser() loggedUser: AuthUserDto,
+    @Param("id") id: string,
+    @Body() updateActivityDto: UpdateActivityDto,
+  ): Promise<ApiResponse> {
+    const activity = await this.activityService.update(loggedUser, id, updateActivityDto);
+    return new ApiResponse(200, "", activity);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.activityService.remove(+id);
+  @Delete("delete-activity/:id")
+  @ApiBearerAuth()
+  async remove(
+    @AuthUser() loggedUser: AuthUserDto,
+    @Param("id") id: string,
+  ): Promise<ApiResponse> {
+    const activity = await this.activityService.remove(loggedUser, id);
+    return new ApiResponse(200, "", activity);
   }
 }

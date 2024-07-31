@@ -1,6 +1,7 @@
 import { AbstractEntity } from "../../../common/abstract.entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany } from "typeorm";
 import { ERole } from "../../../constants/role.enum";
+import { Activity } from "../../activity/entities/activity.entity";
 
 @Entity()
 export class User extends AbstractEntity {
@@ -23,4 +24,9 @@ export class User extends AbstractEntity {
     role: ERole;
     
     // relations
+    @OneToMany(() => Activity, (activity) => activity.owner, {
+        eager: true,
+    })
+    @JoinColumn()
+    activities: Activity[];
 }
